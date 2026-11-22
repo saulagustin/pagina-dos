@@ -1,0 +1,705 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Mi Recetario</title>
+
+<style>
+
+/* CONFIGURACIÓN GENERAL */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #fff8f0;
+    color: #333;
+}
+
+/* NAVEGACIÓN */
+
+nav {
+    background: #e76f51;
+    padding: 18px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    color: white;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: .3s;
+}
+
+nav a:hover {
+    color: #ffe0b2;
+}
+
+/* PORTADA */
+
+.inicio {
+    min-height: 350px;
+    background: linear-gradient(#0007, #0007),
+    url("https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=1400")
+    center/cover;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 30px;
+}
+
+.inicio h1 {
+    font-size: 45px;
+    margin-bottom: 15px;
+}
+
+.inicio p {
+    font-size: 18px;
+    margin-bottom: 25px;
+}
+
+.btn {
+    background: #e76f51;
+    color: white;
+    padding: 13px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+    transition: .3s;
+}
+
+.btn:hover {
+    background: #c85539;
+    transform: translateY(-2px);
+}
+
+/* SECCIONES */
+
+.seccion {
+    padding: 60px 7%;
+}
+
+.titulo {
+    text-align: center;
+    color: #e76f51;
+    font-size: 32px;
+    margin-bottom: 15px;
+}
+
+.descripcion {
+    text-align: center;
+    color: #777;
+    margin-bottom: 30px;
+}
+
+/* BUSCADOR */
+
+.busqueda {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.busqueda input {
+    width: 100%;
+    max-width: 450px;
+    padding: 13px;
+    border: 2px solid #f4a261;
+    border-radius: 8px;
+    outline: none;
+}
+
+/* CATEGORÍAS */
+
+.categorias {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.categorias button {
+    padding: 10px 18px;
+    border: none;
+    background: #f4a261;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.categorias button:hover,
+.categorias button.activa {
+    background: #e76f51;
+}
+
+/* TARJETAS */
+
+.contenedor-recetas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 30px;
+}
+
+.carta {
+    height: 370px;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.carta-interior {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform .7s;
+    transform-style: preserve-3d;
+}
+
+.carta.girada .carta-interior {
+    transform: rotateY(180deg);
+}
+
+.frente, .atras {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px #0002;
+}
+
+.frente {
+    background: white;
+    text-align: center;
+}
+
+.frente img {
+    width: 100%;
+    height: 290px;
+    object-fit: cover;
+}
+
+.frente h3 {
+    color: #e76f51;
+    padding: 15px;
+}
+
+.frente small {
+    color: #888;
+}
+
+.atras {
+    background: #f4a261;
+    color: white;
+    padding: 20px;
+    transform: rotateY(180deg);
+    overflow-y: auto;
+}
+
+.atras h3 {
+    margin-bottom: 12px;
+}
+
+.atras h4 {
+    margin: 12px 0 5px;
+}
+
+.atras p {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* FORMULARIO */
+
+.formulario {
+    max-width: 650px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px #0001;
+}
+
+.formulario label {
+    display: block;
+    margin: 15px 0 7px;
+    font-weight: bold;
+    color: #555;
+}
+
+.formulario input,
+.formulario textarea,
+.formulario select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    outline: none;
+    font-size: 15px;
+}
+
+.formulario input:focus,
+.formulario textarea:focus,
+.formulario select:focus {
+    border-color: #e76f51;
+}
+
+.formulario textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.formulario button {
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* ACERCA DE */
+
+.acerca {
+    text-align: center;
+    background: #ffe8d6;
+    padding: 60px 20px;
+}
+
+.acerca p {
+    max-width: 600px;
+    margin: 15px auto;
+    line-height: 1.7;
+}
+
+/* PIE DE PÁGINA */
+
+footer {
+    background: #e76f51;
+    color: white;
+    text-align: center;
+    padding: 25px;
+}
+
+/* CELULARES */
+
+@media(max-width: 600px) {
+
+    nav {
+        justify-content: center;
+    }
+
+    nav ul {
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .inicio h1 {
+        font-size: 32px;
+    }
+
+    .seccion {
+        padding: 40px 5%;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVEGACIÓN -->
+
+<nav>
+    <div class="logo">🍴 Mi Recetario</div>
+
+    <ul>
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#recetas">Recetas</a></li>
+        <li><a href="#subir">Subir receta</a></li>
+        <li><a href="#acerca">Acerca de</a></li>
+    </ul>
+</nav>
+
+<!-- PORTADA -->
+
+<header class="inicio" id="inicio">
+
+    <h1>Bienvenido a mi cocina</h1>
+
+    <p>Descubre, comparte y disfruta deliciosas recetas.</p>
+
+    <a href="#recetas" class="btn">
+        Ver recetas
+    </a>
+
+</header>
+
+<!-- RECETAS -->
+
+<section class="seccion" id="recetas">
+
+    <h2 class="titulo">Nuestras recetas</h2>
+
+    <p class="descripcion">
+        Haz clic en una tarjeta para descubrir cómo preparar cada platillo.
+    </p>
+
+    <!-- BUSCADOR -->
+
+    <div class="busqueda">
+        <input
+            type="text"
+            id="buscador"
+            placeholder="🔍 Buscar una receta..."
+            oninput="mostrarRecetas()"
+        >
+    </div>
+
+    <!-- CATEGORÍAS -->
+
+    <div class="categorias">
+
+        <button class="activa" onclick="filtrar('Todas', this)">
+            Todas
+        </button>
+
+        <button onclick="filtrar('Comida', this)">
+            Comida
+        </button>
+
+        <button onclick="filtrar('Postres', this)">
+            Postres
+        </button>
+
+        <button onclick="filtrar('Bebidas', this)">
+            Bebidas
+        </button>
+
+    </div>
+
+    <div class="contenedor-recetas" id="listaRecetas"></div>
+
+</section>
+
+<!-- SUBIR RECETAS -->
+
+<section class="seccion" id="subir">
+
+    <h2 class="titulo">📖 Comparte tu receta</h2>
+
+    <p class="descripcion">
+        Agrega tus propias recetas a nuestro recetario.
+    </p>
+
+    <form class="formulario" id="formReceta">
+
+        <label>Nombre de la receta</label>
+
+        <input
+            type="text"
+            id="nombre"
+            placeholder="Ej. Pastel de chocolate"
+            required
+        >
+
+        <label>URL de la imagen</label>
+
+        <input
+            type="url"
+            id="imagen"
+            placeholder="https://ejemplo.com/imagen.jpg"
+            required
+        >
+
+        <label>Categoría</label>
+
+        <select id="categoria" required>
+            <option value="Comida">Comida</option>
+            <option value="Postres">Postres</option>
+            <option value="Bebidas">Bebidas</option>
+        </select>
+
+        <label>Ingredientes</label>
+
+        <textarea
+            id="ingredientes"
+            placeholder="Escribe los ingredientes..."
+            required
+        ></textarea>
+
+        <label>Preparación</label>
+
+        <textarea
+            id="preparacion"
+            placeholder="Describe los pasos..."
+            required
+        ></textarea>
+
+        <button type="submit" class="btn">
+            + Agregar receta
+        </button>
+
+    </form>
+
+</section>
+
+<!-- ACERCA DE -->
+
+<section class="acerca" id="acerca">
+
+    <h2 class="titulo">Acerca de nosotros</h2>
+
+    <p>
+        Este espacio fue creado para compartir recetas,
+        descubrir nuevos sabores y aprender a cocinar.
+        Aquí todos pueden aportar sus propias creaciones.
+    </p>
+
+    <p>❤️ ¡La cocina es mejor cuando se comparte!</p>
+
+</section>
+
+<!-- FOOTER -->
+
+<footer>
+
+    <p>© 2026 Mi Recetario | Todos los derechos reservados.</p>
+
+</footer>
+
+<!-- JAVASCRIPT -->
+
+<script>
+
+// RECETAS INICIALES
+
+let recetas = [
+    {
+        nombre: "Pasta italiana",
+        imagen: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=500",
+        categoria: "Comida",
+        ingredientes: "Pasta, salsa de tomate, queso y aceite de oliva.",
+        preparacion: "1. Cocina la pasta. 2. Calienta la salsa. 3. Mezcla todo. 4. Agrega queso y sirve."
+    },
+
+    {
+        nombre: "Hamburguesa",
+        imagen: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500",
+        categoria: "Comida",
+        ingredientes: "Pan, carne, lechuga, tomate y queso.",
+        preparacion: "1. Cocina la carne. 2. Tuesta el pan. 3. Agrega los ingredientes. 4. Sirve."
+    },
+
+    {
+        nombre: "Pizza casera",
+        imagen: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500",
+        categoria: "Comida",
+        ingredientes: "Masa, tomate, queso mozzarella y pepperoni.",
+        preparacion: "1. Extiende la masa. 2. Agrega salsa. 3. Añade queso. 4. Hornea."
+    },
+
+    {
+        nombre: "Pastel de chocolate",
+        imagen: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500",
+        categoria: "Postres",
+        ingredientes: "Harina, chocolate, huevos, azúcar y leche.",
+        preparacion: "1. Mezcla los ingredientes. 2. Coloca en un molde. 3. Hornea. 4. Decora."
+    },
+
+    {
+        nombre: "Limonada",
+        imagen: "https://images.unsplash.com/photo-1513558161293-cdaf765edfd4?w=500",
+        categoria: "Bebidas",
+        ingredientes: "Limones, agua, azúcar y hielo.",
+        preparacion: "1. Exprime los limones. 2. Agrega agua. 3. Añade azúcar. 4. Sirve con hielo."
+    }
+];
+
+let categoriaActual = "Todas";
+
+// MOSTRAR RECETAS
+
+function mostrarRecetas() {
+
+    const contenedor = document.getElementById("listaRecetas");
+    const busqueda = document.getElementById("buscador").value.toLowerCase();
+
+    contenedor.innerHTML = "";
+
+    const filtradas = recetas.filter(receta => {
+
+        const coincideNombre = receta.nombre.toLowerCase().includes(busqueda);
+
+        const coincideCategoria =
+            categoriaActual === "Todas" ||
+            receta.categoria === categoriaActual;
+
+        return coincideNombre && coincideCategoria;
+    });
+
+    if (filtradas.length === 0) {
+        contenedor.innerHTML = "<p>No se encontraron recetas.</p>";
+        return;
+    }
+
+    filtradas.forEach(receta => {
+
+        const carta = document.createElement("div");
+        carta.className = "carta";
+
+        carta.innerHTML = `
+            <div class="carta-interior">
+
+                <div class="frente">
+                    <img src="${escapar(receta.imagen)}"
+                         alt="${escapar(receta.nombre)}"
+                         onerror="this.src='https://placehold.co/500x300?text=Receta'">
+
+                    <h3>${escapar(receta.nombre)}</h3>
+                    <small>${escapar(receta.categoria)} · Haz clic para ver</small>
+                </div>
+
+                <div class="atras">
+                    <h3>${escapar(receta.nombre)}</h3>
+
+                    <h4>Ingredientes:</h4>
+                    <p>${escapar(receta.ingredientes).replace(/\n/g, "<br>")}</p>
+
+                    <h4>Preparación:</h4>
+                    <p>${escapar(receta.preparacion).replace(/\n/g, "<br>")}</p>
+                </div>
+
+            </div>
+        `;
+
+        carta.addEventListener("click", () => {
+            carta.classList.toggle("girada");
+        });
+
+        contenedor.appendChild(carta);
+
+    });
+
+}
+
+// EVITAR INSERTAR HTML NO DESEADO
+
+function escapar(texto) {
+    return String(texto).replace(/[&<>"']/g, letra => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[letra]);
+}
+
+// FILTRAR CATEGORÍAS
+
+function filtrar(categoria, boton) {
+
+    categoriaActual = categoria;
+
+    document.querySelectorAll(".categorias button").forEach(btn => {
+        btn.classList.remove("activa");
+    });
+
+    boton.classList.add("activa");
+
+    mostrarRecetas();
+}
+
+// AGREGAR NUEVA RECETA
+
+document.getElementById("formReceta").addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    const nuevaReceta = {
+
+        nombre: document.getElementById("nombre").value.trim(),
+
+        imagen: document.getElementById("imagen").value.trim(),
+
+        categoria: document.getElementById("categoria").value,
+
+        ingredientes: document.getElementById("ingredientes").value.trim(),
+
+        preparacion: document.getElementById("preparacion").value.trim()
+
+    };
+
+    recetas.push(nuevaReceta);
+
+    // Mostrar la receta recién agregada
+
+    categoriaActual = "Todas";
+
+    document.getElementById("buscador").value = "";
+
+    document.querySelectorAll(".categorias button").forEach(btn => {
+        btn.classList.toggle(
+            "activa",
+            btn.textContent.trim() === "Todas"
+        );
+    });
+
+    mostrarRecetas();
+
+    // Limpiar formulario
+
+    this.reset();
+
+    alert("¡Receta agregada correctamente!");
+
+    // Ir a la sección de recetas
+
+    document.getElementById("recetas").scrollIntoView({
+        behavior: "smooth"
+    });
+
+});
+
+// CARGAR RECETAS AL INICIAR
+
+mostrarRecetas();
+
+</script>
+
+</body>
+</html>
